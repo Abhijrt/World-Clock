@@ -21,17 +21,19 @@ export default class extends Component {
 
   handleLoginButtonClick = () => {
     const { username, password } = this.state;
-    console.log(username, password);
+    // console.log(username, password);
     this.props.onLoginButtonClick(username, password);
   };
 
   render() {
-    const { isLoggedIn } = this.props;
+    const { isLoggedIn, error } = this.props;
+
     if (isLoggedIn) {
       return <Redirect to="/clock" />;
     }
     return (
       <Form className="my-5">
+        {error && <h1>{error}</h1>}
         <Col sm={3} className="my-3 text-center">
           <h1>Login Form</h1>
         </Col>

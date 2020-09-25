@@ -13,6 +13,7 @@ class App extends React.Component {
       india: "",
       london: "",
       us: "",
+      error: "",
       users: [
         {
           id: 0,
@@ -37,7 +38,7 @@ class App extends React.Component {
   onLoginButtonClick = (username, password) => {
     const { users } = this.state;
     users.map((user) => {
-      console.log(user.id);
+      // console.log(user.id);
       if (user.username === username && user.password === password) {
         this.setState({
           isLoggedIn: true,
@@ -45,6 +46,7 @@ class App extends React.Component {
         });
       }
     });
+    this.setState({ error: "Invalid User Name or Password" });
   };
   render() {
     return (
@@ -60,6 +62,7 @@ class App extends React.Component {
                   <Login
                     onLoginButtonClick={this.onLoginButtonClick}
                     isLoggedIn={this.state.isLoggedIn}
+                    error={this.state.error}
                   />
                 );
               }}

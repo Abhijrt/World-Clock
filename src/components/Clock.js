@@ -22,6 +22,7 @@ export default class Clock extends Component {
       indiaDiff: "",
       londonDiff: "",
       usSetTime: "",
+      error: "",
     };
   }
 
@@ -50,6 +51,12 @@ export default class Clock extends Component {
     });
   }
 
+  componentDidUpdate() {
+    if (this.state.error != 0) {
+      this.state.error = "";
+    }
+  }
+
   handleChange = (name, value) => {
     // console.log(name, value);
     if (name === "usSetTime") {
@@ -67,6 +74,16 @@ export default class Clock extends Component {
       return;
     }
     var arr = usSetTime.split(":");
+    if (
+      parseInt(arr[0]) > 23 ||
+      parseInt(arr[1]) > 59 ||
+      parseInt(arr[2]) > 59
+    ) {
+      this.setState({
+        error: "InVaild Time Format",
+      });
+      return;
+    }
     var india, london;
     if (parseInt(arr[0]) <= 14) {
       india = parseInt(arr[0]) + 9 + ":" + arr[1] + ":" + arr[2];
@@ -95,14 +112,21 @@ export default class Clock extends Component {
 
   handleLondonDiff = () => {
     const { londonDiff, usTime } = this.state;
+    if (parseInt(londonDiff) > 23 || parseInt(londonDiff) < -23) {
+      this.state.error = "";
+      this.setState({
+        error: "Difference Format is Wrong",
+      });
+      return;
+    }
     var us = usTime.split(":");
     var london = parseInt(us[0]) + parseInt(londonDiff);
     // console.log(london);
     var londonNewTime;
     if (london < 0) {
-      londonNewTime = 24 + london + ":" + us[1] + ":" + us[2];
+      londonNewTime = ((24 + london) % 24) + ":" + us[1] + ":" + us[2];
     } else {
-      londonNewTime = london + ":" + us[1] + ":" + us[2];
+      londonNewTime = (london % 24) + ":" + us[1] + ":" + us[2];
     }
     this.setState({
       londonTime: londonNewTime,
@@ -111,14 +135,21 @@ export default class Clock extends Component {
 
   handleIndiaDiff = () => {
     const { indiaDiff, usTime } = this.state;
+    if (parseInt(indiaDiff) > 23 || parseInt(indiaDiff) < -23) {
+      this.state.error = "";
+      this.setState({
+        error: "Difference Format is Wrong",
+      });
+      return;
+    }
     var us = usTime.split(":");
     var india = parseInt(us[0]) + parseInt(indiaDiff);
     // console.log(london);
     var indiaNewTime;
     if (india < 0) {
-      indiaNewTime = 24 + india + ":" + us[1] + ":" + us[2];
+      indiaNewTime = ((24 + india) % 24) + ":" + us[1] + ":" + us[2];
     } else {
-      indiaNewTime = india + ":" + us[1] + ":" + us[2];
+      indiaNewTime = (india % 24) + ":" + us[1] + ":" + us[2];
     }
     this.setState({
       indiaTime: indiaNewTime,
@@ -127,14 +158,20 @@ export default class Clock extends Component {
 
   render() {
     const { isLoggedIn } = this.props;
-    const { indiaTime, londonTime, usTime, indiaDiff, londonDiff } = this.state;
+    const {
+      indiaTime,
+      londonTime,
+      usTime,
+      indiaDiff,
+      londonDiff,
+      error,
+    } = this.state;
     if (!isLoggedIn) {
       return <Redirect to="/" />;
     }
-    // console.log(usSetTime);
-    // console.log("INdia ******", indiaTime, londonTime, usTime);
     return (
       <div className="my-5">
+        {error && <h1>{error}</h1>}
         <InputGroup className="mb-3">
           <Row sm={12} className="ml-5 mb-3">
             <InputGroup.Prepend className="ml-5">
