@@ -93,17 +93,17 @@ export default class Clock extends Component {
       if (parseInt(us[0]) >= 23) {
         usHour = 0;
       } else {
-        usHour = parseInt(us[0] + 1);
+        usHour = parseInt(us[0]) + 1;
       }
       if (parseInt(india[0]) >= 23) {
         indiaHour = 0;
       } else {
-        indiaHour = parseInt(india[0] + 1);
+        indiaHour = parseInt(india[0]) + 1;
       }
       if (parseInt(london[0]) >= 23) {
         londonHour = 0;
       } else {
-        londonHour = parseInt(london[0] + 1);
+        londonHour = parseInt(london[0]) + 1;
       }
     } else {
       indiaHour = india[0];
