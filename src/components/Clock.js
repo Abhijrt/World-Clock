@@ -26,6 +26,7 @@ export default class Clock extends Component {
     };
   }
 
+  // When the component mount then the real time of all country will display
   componentDidMount() {
     const { indiaOffSet, londonOffSet, usOffSet } = this.state;
     var date = new Date();
@@ -42,6 +43,7 @@ export default class Clock extends Component {
     var india = indiaTime.toLocaleString().substring(12);
     var london = londonTime.toLocaleString().substring(12);
     var us = usTime.toLocaleString().substring(12);
+
     this.setState({
       indiaTime: india,
       londonTime: london,
@@ -49,14 +51,78 @@ export default class Clock extends Component {
       indiaDiff: "+10",
       londonDiff: "+5",
     });
+    setInterval(() => {
+      this.afterFiveSecond();
+    }, 5000);
   }
 
+  // this function will call after every five second and update the time
+  afterFiveSecond = () => {
+    console.log("Hii");
+    const { usTime, indiaTime, londonTime } = this.state;
+    // console.log(usTime, indiaTime, londonTime);
+    var india = indiaTime.split(":");
+    var london = londonTime.split(":");
+    var us = usTime.split(":");
+    var second = 0;
+    var minute = 0;
+    var addInhour = 0;
+    var usHour = 0;
+    var indiaHour = 0;
+    var londonHour = 0;
+    // var hour = 0;
+    if (parseInt(us[2]) >= 55) {
+      second = (parseInt(us[2]) + 5) % 60;
+      if (parseInt(us[1]) >= 59) {
+        minute = (parseInt(us[1]) + 1) % 60;
+        addInhour = 1;
+      } else {
+        minute = parseInt(us[1]) + 1;
+      }
+    } else {
+      second = parseInt(us[2]) + 5;
+      minute = parseInt(us[1]);
+    }
+    if (addInhour === 1) {
+      if (parseInt(us[0]) >= 23) {
+        usHour = 0;
+      } else {
+        usHour = parseInt(us[0] + 1);
+      }
+      if (parseInt(india[0]) >= 23) {
+        indiaHour = 0;
+      } else {
+        indiaHour = parseInt(india[0] + 1);
+      }
+      if (parseInt(london[0]) >= 23) {
+        londonHour = 0;
+      } else {
+        londonHour = parseInt(london[0] + 1);
+      }
+    } else {
+      indiaHour = india[0];
+      londonHour = london[0];
+      usHour = us[0];
+    }
+    var finalUsTime = usHour + ":" + minute + ":" + second;
+    var finalIndiaTime = indiaHour + ":" + minute + ":" + second;
+    var finalLondonTime = londonHour + ":" + minute + ":" + second;
+
+    this.setState({
+      usTime: finalUsTime,
+      indiaTime: finalIndiaTime,
+      londonTime: finalLondonTime,
+    });
+  };
+
+  // for message error
   componentDidUpdate() {
     if (this.state.error != 0) {
       this.state.error = "";
     }
   }
 
+  // if user give any input it handle it
   handleChange = (name, value) => {
     // console.log(name, value);
     if (name === "usSetTime") {
@@ -68,6 +134,7 @@ export default class Clock extends Component {
     }
   };
 
+  // handle the time if user give the time
   handleUsTime = () => {
     const { usSetTime } = this.state;
     if (usSetTime.length === 0) {
@@ -106,10 +173,9 @@ export default class Clock extends Component {
       indiaDiff: "+9",
       londonDiff: "+5",
     });
-
-    // console.log(india, london);
   };
 
+  // handle the london diff if user give the diff
   handleLondonDiff = () => {
     const { londonDiff, usTime } = this.state;
     if (parseInt(londonDiff) > 23 || parseInt(londonDiff) < -23) {
@@ -133,6 +199,7 @@ export default class Clock extends Component {
     });
   };
 
+  //  handle the india diff if user give the diff
   handleIndiaDiff = () => {
     const { indiaDiff, usTime } = this.state;
     if (parseInt(indiaDiff) > 23 || parseInt(indiaDiff) < -23) {
