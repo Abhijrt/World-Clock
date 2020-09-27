@@ -11,6 +11,7 @@ export default class extends Component {
     };
   }
 
+  // When user type into the input then handle it by this function
   handleChange = (name, value) => {
     if (name === "username") {
       this.setState({ username: value });
@@ -19,6 +20,7 @@ export default class extends Component {
     }
   };
 
+  // when login button click then we handle it
   handleLoginButtonClick = () => {
     const { username, password } = this.state;
     // console.log(username, password);

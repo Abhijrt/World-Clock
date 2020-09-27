@@ -14,6 +14,7 @@ class App extends React.Component {
       london: "",
       us: "",
       error: "",
+      // giving the by default user
       users: [
         {
           id: 0,
@@ -29,12 +30,14 @@ class App extends React.Component {
     };
   }
 
+  // hanlde the logout
   handleLogOut = () => {
     this.setState({
       isLoggedIn: false,
     });
   };
 
+  // authentication user if password and username match
   onLoginButtonClick = (username, password) => {
     const { users } = this.state;
     users.map((user) => {

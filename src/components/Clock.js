@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+
+// importing the bootstrap components
 import {
   Row,
   Col,
@@ -7,6 +9,8 @@ import {
   FormControl,
   Container,
 } from "react-bootstrap";
+
+// importin the Redirect component for redirecting if user not login
 import { Redirect } from "react-router-dom";
 
 export default class Clock extends Component {
@@ -16,7 +20,7 @@ export default class Clock extends Component {
       indiaOffSet: 5.5,
       londonOffSet: 1,
       usOffSet: -4,
-      indiaTime: "", //new Date().toTimeString().substring(0, 8),
+      indiaTime: "",
       londonTime: "",
       usTime: "",
       indiaDiff: "",
@@ -29,21 +33,24 @@ export default class Clock extends Component {
   // When the component mount then the real time of all country will display
   componentDidMount() {
     const { indiaOffSet, londonOffSet, usOffSet } = this.state;
+    // finding the india date and time
     var date = new Date();
-    // console.log("Date", date);
+    // finding the local time in miliseond
     var localTime = date.getTime();
-    // console.log("LocalTIme", localTime);
+    // finding the local offSet
     var localOffSet = date.getTimezoneOffset() * 60000;
-    // console.log("LocalOFFSet", localOffSet);
+    // findinf the utc so that calcluate the other country time
     var utc = localOffSet + localTime;
-    // console.log("UTC", utc);
+    // finding the all city time by offset
     var indiaTime = new Date(utc + 3600000 * indiaOffSet);
     var londonTime = new Date(utc + 3600000 * londonOffSet);
     var usTime = new Date(utc + 3600000 * usOffSet);
+    // convert time into the showable time
     var india = indiaTime.toLocaleString().substring(12);
     var london = londonTime.toLocaleString().substring(12);
     var us = usTime.toLocaleString().substring(12);
 
+    // updating the state
     this.setState({
       indiaTime: india,
       londonTime: london,
@@ -51,6 +58,7 @@ export default class Clock extends Component {
       indiaDiff: "+10",
       londonDiff: "+5",
     });
+    // update funciton call every after 5 second
     setInterval(() => {
       this.afterFiveSecond();
     }, 5000);
@@ -58,9 +66,7 @@ export default class Clock extends Component {
 
   // this function will call after every five second and update the time
   afterFiveSecond = () => {
-    console.log("Hii");
     const { usTime, indiaTime, londonTime } = this.state;
-    // console.log(usTime, indiaTime, londonTime);
     var india = indiaTime.split(":");
     var london = londonTime.split(":");
     var us = usTime.split(":");
@@ -187,7 +193,6 @@ export default class Clock extends Component {
     }
     var us = usTime.split(":");
     var london = parseInt(us[0]) + parseInt(londonDiff);
-    // console.log(london);
     var londonNewTime;
     if (london < 0) {
       londonNewTime = ((24 + london) % 24) + ":" + us[1] + ":" + us[2];
@@ -211,7 +216,6 @@ export default class Clock extends Component {
     }
     var us = usTime.split(":");
     var india = parseInt(us[0]) + parseInt(indiaDiff);
-    // console.log(london);
     var indiaNewTime;
     if (india < 0) {
       indiaNewTime = ((24 + india) % 24) + ":" + us[1] + ":" + us[2];
